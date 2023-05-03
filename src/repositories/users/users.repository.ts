@@ -1,4 +1,4 @@
-import { UserEntity } from '../../entities/user.entity';
+import { CreateUserDTO, UpdateUserDTO, UserEntity } from '../../entities/user.entity';
 
 export interface UsersRepository {
 
@@ -8,9 +8,9 @@ export interface UsersRepository {
 
   findByEmail(email: string): Promise<UserEntity | null>;
 
-  create(data: any): Promise<UserEntity>;
+  create(data: CreateUserDTO): Promise<UserEntity>;
 
-  update(id: string, data: any): Promise<UserEntity | null>;
+  update(id: string, data: UpdateUserDTO): Promise<UserEntity | null>;
 
   delete(id: string): Promise<void>;
 

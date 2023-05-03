@@ -7,3 +7,16 @@ export interface UserEntity {
   password: string,
   role: UserRole,
 }
+
+export interface CreateUserDTO {
+  name: string,
+  email: string,
+  password: string,
+  role?: UserRole,
+}
+
+export interface UpdateUserDTO {
+  name?: string,
+  password?: string,
+  role?: UserRole,
+}
