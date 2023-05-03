@@ -1,5 +1,4 @@
 import { CreateUserDTO, UserEntity } from '../../entities/user.entity';
-import { APIError } from '../../errors/api.error';
 import { BadRequestError } from '../../errors/bad-request.error';
 import { UsersRepository } from '../../repositories/users/users.repository';
 
