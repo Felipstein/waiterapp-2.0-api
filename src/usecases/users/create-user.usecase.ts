@@ -1,6 +1,7 @@
 import { CreateUserDTO, UserEntity } from '../../entities/user.entity';
 import { BadRequestError } from '../../errors/bad-request.error';
 import { UsersRepository } from '../../repositories/users/users.repository';
+import { hashService } from '../../services/hash.service';
 
 export class CreateUserUseCase {
 
@@ -30,7 +31,9 @@ export class CreateUserUseCase {
       throw new BadRequestError('E-mail já cadastrado.');
     }
 
-    const user = await this.usersRepository.create({ name, email, password, role });
+    const passwordEncrypted = await hashService.hash(password);
+
+    const user = await this.usersRepository.create({ name, email, password: passwordEncrypted, role });
 
     return user;
   }
