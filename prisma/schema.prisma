@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  WAITER
+  ADMIN
+}
+
+model User {
+  id       String   @id @default(cuid())
+  name     String
+  email    String   @unique
+  password String
+  role     UserRole @default(WAITER)
+
+  @@map("users")
+}
+
+model Category {
+  id      String    @id @default(cuid())
+  name    String
+  emoji   String
+  Product Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id                String              @id @default(cuid())
+  name              String
+  description       String?
+  imageKey          String              @unique @map("image_key")
+  imageUrl          String              @unique @map("image_url")
+  price             Float
+  category          Category            @relation(fields: [categoryId], references: [id])
+  categoryId        String              @map("category_id")
+  ProductIngredient ProductIngredient[]
+  RegisteredProduct RegisteredProduct[]
+  ProductOrder      ProductOrder[]
+
+  @@map("products")
+}
+
+model Ingredient {
+  id                String              @id @default(cuid())
+  name              String
+  emoji             String
+  ProductIngredient ProductIngredient[]
+
+  @@map("ingredients")
+}
+
+model ProductIngredient {
+  id           String     @id @default(cuid())
+  product      Product    @relation(fields: [productId], references: [id])
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  productId    String     @map("product_id")
+  ingredientId String     @map("ingredient_id")
+
+  @@map("product_ingredients")
+}
+
+model ProductOrder {
+  id        String  @id @default(cuid())
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+  orderId   String  @map("order_id")
+  productId String  @map("product_id")
+
+  @@map("products_order")
+}
+
+enum OrderStatus {
+  WAITING
+  IN_PRODUCTION
+  READY
+}
+
+model Order {
+  id           String         @id @default(cuid())
+  table        Int
+  status       OrderStatus    @default(WAITING)
+  createdAt    DateTime       @map("created_at")
+  updatedAt    DateTime       @map("updated_at")
+  ProductOrder ProductOrder[]
+
+  @@map("orders")
+}
+
+model RegisteredProduct {
+  id                            String                          @id @default(cuid())
+  name                          String
+  category                      String
+  price                         Float
+  realReferenceProduct          Product                         @relation(fields: [realReferenceProductId], references: [id])
+  realReferenceProductId        String                          @map("real_reference_product_id")
+  RegisteredProductOrderHistory RegisteredProductOrderHistory[]
+
+  @@map("registered_products")
+}
+
+model RegisteredProductOrderHistory {
+  id                  String            @id @default(cuid())
+  orderHistory        OrderHistory      @relation(fields: [orderHistoryId], references: [id])
+  registeredProduct   RegisteredProduct @relation(fields: [registeredProductId], references: [id])
+  orderHistoryId      String            @map("order_history_id")
+  registeredProductId String            @map("registered_product_id")
+
+  @@map("registered_products_order_history")
+}
+
+model OrderHistory {
+  id                            String                          @id @default(cuid())
+  table                         Int
+  createdAt                     DateTime                        @map("created_at")
+  finishedAt                    DateTime                        @map("finished_at")
+  RegisteredProductOrderHistory RegisteredProductOrderHistory[]
+
+  @@map("orders_history")
+}
