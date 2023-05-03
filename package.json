@@ -4,7 +4,7 @@
   "main": "src/server.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "tsnd --respawn --exit-child --transpile-only --ignore-watch node_modules src/server.ts"
+    "dev": "NODE_ENV=development tsnd --respawn --exit-child --transpile-only --ignore-watch node_modules src/server.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.13.0",
