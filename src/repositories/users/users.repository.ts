@@ -1,16 +1,16 @@
-import { User } from '@prisma/client';
+import { UserEntity } from '../../entities/user.entity';
 
 export interface UsersRepository {
 
-  findAll(): Promise<User[]>;
+  findAll(): Promise<UserEntity[]>;
 
-  findById(id: string): Promise<User | null>;
+  findById(id: string): Promise<UserEntity | null>;
 
-  findByEmail(email: string): Promise<User | null>;
+  findByEmail(email: string): Promise<UserEntity | null>;
 
-  create(data: any): Promise<User>;
+  create(data: any): Promise<UserEntity>;
 
-  update(id: string, data: any): Promise<User | null>;
+  update(id: string, data: any): Promise<UserEntity | null>;
 
   delete(id: string): Promise<void>;
 
